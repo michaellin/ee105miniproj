@@ -16,15 +16,6 @@
 
 \maketitle
 
-\section{Circuit Diagram}
-\begin{figure}[htbp]
-	\begin{center}
-		\includegraphics[scale=0.75,angle=-90]{circuitdiagram.png}
-		\caption{Circuit Diagram}
-	\end{center}
-\end{figure}
-\FloatBarrier
-\newpage
 \section{Topology}
 \subsection{MOSFET vs BJT}
 
@@ -117,15 +108,24 @@ voltage swing.
 Another problem we saw was that the power supply started getting very noisy probably due to feedback in the circuit or inappropriate capacitor
 decoupling, this is an effect called "Squegging". Our solution to this was to add a 10uF capacitor in shunt with the power supply rails as 
 seen in Figure 1 capacitor C9.
+\newpage 
+
+\section{Circuit Diagram}
+\begin{figure}[htbp]
+	\begin{center}
+		\includegraphics[scale=0.80,angle=-90]{circuitdiagram.png}
+		\caption{Circuit Diagram}
+	\end{center}
+\end{figure}
+\FloatBarrier
+\newpage
 
 \section{Hand Calculations and Measurements}
 \subsection{Common Source Bias calculations}
 Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
 $V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
-\begin{equation}
-I_d = \frac{1}{2}K_p(V_G-R_sI_d-V_{TO})^2(1+\lamda(V_G-R_sI_d))
-\end{equation}
 
+$I_d = \frac{1}{2} K_p (V_G - R_s I_d -V_{TO})^2 (1 + \lambda (V_G - R_s I_d))$
 \begin{align*}
 K_p &= 0.277\\
 R_s &= 100\Omega\\
@@ -137,6 +137,20 @@ V_G &= 2.6V
 \end{align*}
 
 \subsection*{Magnitude/Phase Bode Plot}
+
+\begin{tabular}{|r|l|l|}
+\hline
+Frequency & Magnitude & Phase\\
+\hline
+$1$ kHz & 91.25 dBV & 180 \\
+$2.8$ kHz & 90.89 dBV & 200 \\
+$4.6$ kHz & 90.89 dBV & 200 \\
+$6.4$ kHz& 93.07 dBV & 200 \\
+$8.2$ kHz & 92.62 dBV & 200 \\
+$10$  kHz& 93.07 dBV & 200 \\
+\hline
+\end{tabular}
+
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=7in]{MagPlot.png}
@@ -145,7 +159,23 @@ V_G &= 2.6V
 \end{figure}
 \FloatBarrier
 
+\begin{figure}
+\begin{center}
+\includegraphics[width=7in]{measuredmag.png}
+\caption{Measured Magnitude Plot}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=7in]{measuredphase.png}
+\caption{Measured Phase Plot}
+\end{center}
+\end{figure}
+\FloatBarrier
+
 \subsection*{Output Impedance}
+Measured output impedance: $940 \Omega$
 \subsection*{Bias Voltages/Currents}
 \begin{tabular}{|r|l|l|}
 \hline
