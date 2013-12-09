@@ -121,6 +121,7 @@ seen in Figure 1 capacitor C9.
 \newpage
 
 \section{Hand Calculations and Measurements}
+
 \subsection{Common Source Bias calculations}
 %%Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
 %%$V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
@@ -135,6 +136,47 @@ seen in Figure 1 capacitor C9.
 %%6e-3 &= \frac{1}{2}0.277(V_G-0.6-1.8)^2(1+0.003(V_G-0.6))\\
 %%V_G &= 2.6V
 %%\end{align*}
+
+\subsection*{Bias Voltages/Currents}
+\begin{tabular}{|r|l|l|}
+\hline
+Stage & $V_{GS}$ & Drain Current\\
+\hline
+Stage 1 &2.32V&6.2mA\\
+Stage 2 &2.4V&6.2mA\\
+Stage 3 &2.37V&5.14mA\\
+Stage 4 &2.48V&4.55mA\\
+Stage 5 &2.38V&5mA\\%Made up
+Stage 6 &4.7V&41mA\\
+Stage 7 &2.8V&35mA\\
+\hline
+\end{tabular}
+
+\begin{tabular}{|r|l|l|}
+\hline
+Stage & $V_{G}$ & Drain Current\\
+\hline
+Stage 1 &2.9V&6.09mA\\
+Stage 2 &2.4V&6.2mA\\
+Stage 3 &2.37V&5.14mA\\
+Stage 4 &2.48V&4.55mA\\
+Stage 5 &2.38V&5mA\\
+Stage 6 &4.7V&41mA\\
+\hline
+\end{tabular}
+
+\begin{tabular}{|r|l|l|}
+\hline
+Stage & $V_{inPP}$ & $V_{outPP}$ & Gain\\
+1 & 20mV & 170mV & 8.5\\
+2 & 20mV & 100mV & 5\\
+3 & 20mV & 105mV & 5.25\\
+4 & 20mV & 110mV & 5.5\\
+5 & 20mV & 100mV & 5\\
+6 & 20mV & 200mV & 10\\
+\hline
+\end{tabular}
+
 
 \subsection*{Magnitude/Phase Bode Plot}
 
@@ -207,34 +249,6 @@ and $I_D$ can be found using the following equation and given device parameters:
 \end{align*}
 Since our bias voltage is DC coupled to the output of the previous stage, our $V_G = 2.7 V$. 
 So we can calculate that $I_D = 3.4 mA, g_m = .012, r_o = 98k$. $R_{out} = 45 \Omega$
-\subsection*{Bias Voltages/Currents}
-\begin{tabular}{|r|l|l|}
-\hline
-Stage & $V_{GS}$ & Drain Current\\
-\hline
-Stage 1 &2.32V&6.2mA\\
-Stage 2 &2.4V&6.2mA\\
-Stage 3 &2.37V&5.14mA\\
-Stage 4 &2.48V&4.55mA\\
-Stage 5 &2.38V&5mA\\%Made up
-Stage 6 &4.7V&41mA\\
-Stage 7 &2.8V&35mA\\
-\hline
-\end{tabular}
-
-\begin{tabular}{|r|l|l|}
-\hline
-Stage & $V_{G}$ & Drain Current\\
-\hline
-Stage 1 &2.9V&6.09mA\\
-Stage 2 &2.4V&6.2mA\\
-Stage 3 &2.37V&5.14mA\\
-Stage 4 &2.48V&4.55mA\\
-Stage 5 &2.38V&5mA\\
-Stage 6 &4.7V&41mA\\
-\hline
-\end{tabular}
-
 
 \subsection*{Power Consumption}
 
