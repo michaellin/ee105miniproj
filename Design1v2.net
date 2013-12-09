@@ -16,13 +16,13 @@ R9 N001 Vout3 1k
 R10 N012 0 100
 R12 N008 N003 100k
 C3 N008 Vout2 10µF
-R14 N001 N004 1k
-R15 N001 Vout4 1k
+R14 N001 N004 2k
+R15 N001 Vout4 2k
 R16 N013 0 100
 R17 N009 N004 100k
 C4 N009 Vout3 10µF
-R21 N001 N005 1k
-R22 N001 N011 1k
+R21 N001 N005 5k
+R22 N001 N011 5k
 R23 N014 0 100
 R24 N010 N005 100k
 C6 N010 Vout4 10µF
@@ -73,6 +73,6 @@ D1 5 3 N3306D
 +                Tr=233.7n Tf=466.5p Itf=0 Vtf=0 Xtf=0 Rb=10)
 *                Fairchild        pid=2N4400      case=TO92
 *                88-09-13 bam    creation
-.ac dec 500 100 50k
+.ac dec 500 100 10k
 .backanno
 .end

@@ -6,6 +6,7 @@
 \usepackage{graphicx}       % Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{placeins}
 
 \title{EE105 MiniProject: AM Radio}
 \author{Michael Lin and Jene Li}
@@ -16,9 +17,17 @@
 \maketitle
 
 \section{Introduction}
+\newpage
 
 \section{Circuit Diagram}
-
+\begin{figure}[htbp]
+	\begin{center}
+		\includegraphics[scale=0.8,angle=-90]{circuitdiagram.png}
+		\caption{Circuit Diagram}
+	\end{center}
+\end{figure}
+\FloatBarrier
+\newpage
 \section{Topology}
 We used a total of 6 stages in our amplifier. Five common sources and one source follower.
 Our first decision was to choose topologies to use for amplification. We first considered using a cascode stage because of 
@@ -33,6 +42,7 @@ will amplify and rail this difference.
 \caption{Cascode topology}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 After some more consideration, we decided to use multiple stages of common source topologies because they would be much easier to 
 bias than cascode stage. We also decided to use MOSFETS rather than BJTs because while they had lower gain than BJTs (the $g_m$ of MOSFETS
@@ -44,7 +54,7 @@ Going back to the biasing of the common sources. Our first decision was to choos
 would depend on this current. We will go through this calculations in a later section, but it is easy to see that both drain current and 
 $V_{outBIAS}$ are straight forward to bias. Drain current is set by using a current mirror, as shown in Figure 3. Then we choose our drain 
 resistance such that we get a well centered $V_{outBIAS}$. In our case, we chose $R_D=1000k\Omega$, so the voltage drop on the resistor would be 
-6V and leave a $V_{outBIAS}\approx 4V$. The gain per common sourcce stage turned out to be low and inconsistent across different BS170, probably
+6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned out to be low and inconsistent across different BS170, probably
 due to their mismatch in $\frac{W}{L}$, in fact, it was a gain ranging from 5 to 10. However, since we did not have inter-stage loading gain loss,
 cascading multiple of this common sources would increase our gain exponentially with a base in the range of 5 to 10. So five stages were enough
 to reach a gain of over 12500.
@@ -55,7 +65,19 @@ to reach a gain of over 12500.
 \caption{Current Mirror Biasing a common source}
 \end{center}
 \end{figure}
+\FloatBarrier
 
+\section{Hand Calculations and Measurements}
+\subsection*{Magnitude/Phase Bode Plot}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=4in]{MagPlot.pdf}
+\caption{Current Mirror Biasing a common source}
+\end{center}
+\end{figure}
+\FloatBarrier
+\subsection*{Output Impedance}
+\subsection*{Bias Voltages/Currents}
 \begin{tabular}{|r|l|l|}
 \hline
 Stage & $V_{GS}$ & Drain Current\\
@@ -66,14 +88,8 @@ Stage 3 &2.37V&5.14mA\\
 Stage 4 &2.48V&4.55mA\\
 Stage 5 &4.7V&41mA\\
 Stage 6 &2.8V&35mA\\
+\hline
 \end{tabular}
-
-
-
-\section{Hand Calculations and Measurements}
-\subsection*{Magnitude/Phase Bode Plot}
-\subsection*{Output Impedance}
-\subsection*{Bias Voltages/Currents}
 \subsection*{Power Consumption}
 
 \end{document}
