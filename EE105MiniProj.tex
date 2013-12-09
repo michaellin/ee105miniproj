@@ -73,8 +73,9 @@ of 5 to 10 every stage. So five stages were enough to reach a gain of over 12500
 
 \subsection{Coupling between stages}
 
-Between each of the common source stages we AC couple with a 10uF capacitor and individually bias each stage with its own current mirror circuit
-as shown in Figure 1.
+Between each of the common source stages we AC couple with a 10uF capacitor and individually bias the gate voltage of each stage with its own current 
+mirror circuit as shown in Figure 1. Between the last common source M13 and the source follower M15 we use DC coupling as we will explain later on. 
+And finally to drive the $8\Omega$ speaker we AC couple it so we dont drive it with a bias voltage otherwise it could sound distorted.
 
 \subsection{Loading Stage}
 The last stage of our amplifier is a Common Drain. We decided to use a common drain for multiple reasons. The first one and the main one
@@ -110,8 +111,15 @@ voltage swing.
 \end{figure}
 \FloatBarrier
 
+\subsection{Other small fixes to the amplifier}
+Another problem we saw was that the power supply started getting very noisy probably due to feedback in the circuit or inappropriate capacitor
+decoupling, this is an effect called "Squegging". Our solution to this was to add a 10uF capacitor in shunt with the power supply rails as 
+seen in Figure 1 capacitor C9.
+
 
 \section{Hand Calculations and Measurements}
+
+
 \subsection*{Magnitude/Phase Bode Plot}
 \begin{figure}[htbp]
 \begin{center}
@@ -127,12 +135,24 @@ voltage swing.
 \hline
 Stage & $V_{GS}$ & Drain Current\\
 \hline
-Stage 1 &2.32V&6.33mA\\
+Stage 1 &2.32V&6.2mA\\
 Stage 2 &2.4V&6.2mA\\
 Stage 3 &2.37V&5.14mA\\
 Stage 4 &2.48V&4.55mA\\
 Stage 5 &4.7V&41mA\\
 Stage 6 &2.8V&35mA\\
+\hline
+\end{tabular}
+
+\begin{tabular}{|r|l|l|}
+\hline
+Stage & $V_{G}$ & Drain Current\\
+\hline
+Stage 1 &2.9V&6.09mA\\
+Stage 2 &2.4V&6.2mA\\
+Stage 3 &2.37V&5.14mA\\
+Stage 4 &2.48V&4.55mA\\
+Stage 5 &4.7V&41mA\\
 \hline
 \end{tabular}
 \subsection*{Power Consumption}
