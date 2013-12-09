@@ -16,9 +16,16 @@
 \maketitle
 
 \section{Introduction}
+\newpage
 
 \section{Circuit Diagram}
-
+\begin{figure}[htbp]
+	\begin{center}
+		\includegraphics[scale=0.8,angle=-90]{circuitdiagram.png}
+		\caption{Circuit Diagram}
+	\end{center}
+\end{figure}
+\newpage
 \section{Topology}
 We used a total of 6 stages in our amplifier. Five common sources and one source follower.
 Our first decision was to choose topologies to use for amplification. We first considered using a cascode stage because of 
@@ -44,7 +51,7 @@ Going back to the biasing of the common sources. Our first decision was to choos
 would depend on this current. We will go through this calculations in a later section, but it is easy to see that both drain current and 
 $V_{outBIAS}$ are straight forward to bias. Drain current is set by using a current mirror, as shown in Figure 3. Then we choose our drain 
 resistance such that we get a well centered $V_{outBIAS}$. In our case, we chose $R_D=1000k\Omega$, so the voltage drop on the resistor would be 
-6V and leave a $V_{outBIAS}\approx 4V$. The gain per common sourcce stage turned out to be low and inconsistent across different BS170, probably
+6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned out to be low and inconsistent across different BS170, probably
 due to their mismatch in $\frac{W}{L}$, in fact, it was a gain ranging from 5 to 10. However, since we did not have inter-stage loading gain loss,
 cascading multiple of this common sources would increase our gain exponentially with a base in the range of 5 to 10. So five stages were enough
 to reach a gain of over 12500.
