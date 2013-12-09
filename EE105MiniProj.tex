@@ -61,7 +61,8 @@ resistance such that we get a well centered $V_{outBIAS}$. In our case, we chose
 6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned out to be low due to this small $R_D$ and inconsistent across different 
 BS170, probably due to their mismatch in $\frac{W}{L}$, in fact, it was a gain ranging from 5 to 10. However, since we did not have inter-stage loading 
 gain loss due to the infinite gate impedance of the common sources, cascading multiple of this topologies increased our gain exponentially by a factor
-of 5 to 10 every stage. So five stages were enough to reach a gain of over 12500.
+of 5 to 10 every stage. So five stages were enough to reach a gain of over 12500. Besides the drain resistor, we also added a $100\Omega$ resistor 
+at the source to stabilize the gate to source voltage.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -116,9 +117,23 @@ Another problem we saw was that the power supply started getting very noisy prob
 decoupling, this is an effect called "Squegging". Our solution to this was to add a 10uF capacitor in shunt with the power supply rails as 
 seen in Figure 1 capacitor C9.
 
-
 \section{Hand Calculations and Measurements}
+\subsection{Common Source Bias calculations}
+Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
+$V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
+\begin{equation}
+I_d = \frac{1}{2}K_p(V_G-R_sI_d-V_{TO})^2(1+\lamda(V_G-R_sI_d))
+\end{equation}
 
+\begin{align*}
+K_p &= 0.277\\
+R_s &= 100\Omega\\
+V_{TO} &= 1.8V\\
+\lambda &= 0.003\\
+I_d &= 6mA\\
+6e-3 &= \frac{1}{2}0.277(V_G-0.6-1.8)^2(1+0.003(V_G-0.6))\\
+V_G &= 2.6V
+\end{align*}
 
 \subsection*{Magnitude/Phase Bode Plot}
 \begin{figure}[htbp]
@@ -155,6 +170,8 @@ Stage 4 &2.48V&4.55mA\\
 Stage 5 &4.7V&41mA\\
 \hline
 \end{tabular}
+
+
 \subsection*{Power Consumption}
 
 \end{document}
