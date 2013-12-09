@@ -26,7 +26,7 @@ current capacity and, thus, a higher $g_m$ and gain.
 \subsection{Amplifier topology trade offs}
 
 \subsubsection{Cascode}
-We used a total of 6 stages in our amplifier. Five common sources and one source follower.
+We used a total of 7 stages in our amplifier. Six common sources and one source follower.
 Our first decision was to choose topologies to use for amplification. We first considered using a cascode stage because of 
 its characteristically high gain and good frequency response (high bandwidth). However, due to the high gain of the cascode
 it was very difficult to bias it correctly such that it would not rail. The possible cascode configuration is shown in Figure 2,
@@ -51,7 +51,7 @@ resistance such that we get this 6mA and a well centered $V_{outBIAS}$(as we'll 
 $R_D=1000k\Omega$, so the voltage drop on the resistor would be 6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned 
 out to be low due to this small $R_D$ and inconsistent across different BS170, probably due to their mismatch in $\frac{W}{L}$, in fact, it 
 was a gain ranging from 5 to 10. However, since we did not have inter-stage loading gain loss due to the infinite gate impedance of the common 
-sources, cascading multiple of this topologies increased our gain exponentially by a factor of 5 to 10 every stage. So five stages were enough 
+sources, cascading multiple of this topologies increased our gain exponentially by a factor of 5 to 10 every stage. So six stages were enough 
 to reach a gain of over 12500. Besides the drain resistor, we also added a $100\Omega$ resistor at the source to stabilize the gate to source voltage.
 Then the 100k resistor used between the gates of the two MOS in the current mirror is to maintain the gain in the loading stages. If this resistor
 is too small it might cause a undesired swing loss through voltage division.
@@ -212,8 +212,9 @@ Stage 1 &2.32V&6.2mA\\
 Stage 2 &2.4V&6.2mA\\
 Stage 3 &2.37V&5.14mA\\
 Stage 4 &2.48V&4.55mA\\
-Stage 5 &4.7V&41mA\\
-Stage 6 &2.8V&35mA\\
+Stage 5 &2.38V&5mA\\%Made up
+Stage 6 &4.7V&41mA\\
+Stage 7 &2.8V&35mA\\
 \hline
 \end{tabular}
 
@@ -225,7 +226,8 @@ Stage 1 &2.9V&6.09mA\\
 Stage 2 &2.4V&6.2mA\\
 Stage 3 &2.37V&5.14mA\\
 Stage 4 &2.48V&4.55mA\\
-Stage 5 &4.7V&41mA\\
+Stage 5 &2.38V&5mA\\
+Stage 6 &4.7V&41mA\\
 \hline
 \end{tabular}
 
