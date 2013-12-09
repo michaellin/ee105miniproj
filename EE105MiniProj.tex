@@ -122,19 +122,19 @@ seen in Figure 1 capacitor C9.
 
 \section{Hand Calculations and Measurements}
 \subsection{Common Source Bias calculations}
-Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
-$V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
+%%Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
+%%$V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
 
-$I_d = \frac{1}{2} K_p (V_G - R_s I_d -V_{TO})^2 (1 + \lambda (V_G - R_s I_d))$
-\begin{align*}
-K_p &= 0.277\\
-R_s &= 100\Omega\\
-V_{TO} &= 1.8V\\
-\lambda &= 0.003\\
-I_d &= 6mA\\
-6e-3 &= \frac{1}{2}0.277(V_G-0.6-1.8)^2(1+0.003(V_G-0.6))\\
-V_G &= 2.6V
-\end{align*}
+%%$I_d = \frac{1}{2} K_p (V_G - R_s I_d -V_{TO})^2 (1 + \lambda (V_G - R_s I_d))$
+%%\begin{align*}
+%%K_p &= 0.277\\
+%%R_s &= 100\Omega\\
+%%V_{TO} &= 1.8V\\
+%%\lambda &= 0.003\\
+%%I_d &= 6mA\\
+%%6e-3 &= \frac{1}{2}0.277(V_G-0.6-1.8)^2(1+0.003(V_G-0.6))\\
+%%V_G &= 2.6V
+%%\end{align*}
 
 \subsection*{Magnitude/Phase Bode Plot}
 
