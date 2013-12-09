@@ -155,7 +155,7 @@ $8.2$ kHz & 92.62 dBV & 200 \\
 $10$  kHz& 93.07 dBV & 200 \\
 \hline
 \end{tabular}
-
+Our Bode plot for the magnitude has some distortion since Excel doesn't display dB scales very well when the range of values is very small.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=7in]{MagPlot.png}
@@ -181,6 +181,28 @@ $10$  kHz& 93.07 dBV & 200 \\
 
 \subsection*{Output Impedance}
 Measured output impedance: $940 \Omega$
+Calculated output impedance:
+We know that the output impedance of the Source Follower stage is $R_S || r_o || \frac{1}{g_m}$.
+\begin{align*}
+	R_{out} &= (100 || r_o || \frac{1}{g_m}) \\
+	&= \frac{100r_o}{100g_m r_o + r_o + 100} \\
+\end{align*}
+Our $g_m$ and $r_o$ can be found with the following equations:
+\begin{align*}
+	g_m &= \frac{2 I_D}{V_{GS} - V_{TH}} \\
+	r_o &= \frac{1}{\lambda I_D} \\
+\end{align*}
+and $I_D$ can be found using the following equation and given device parameters: 
+\begin{align*}
+	I_D &= \frac{1}{2} \mu_n C_{ox} \frac{W}{L}(V_{GS} -V_{TH})^2 (1+\lambda V_{DS}) \\
+	&= \frac{1}{2}K_p (V_G - R_s I_D - V_{TO})^2 (1+ \lambda (V_DD - R_s I_D)) \\
+	K_P &= 0.277 \\
+	R_s &= 100 \Omega \\
+	V_{TO} &= 1.8 V \\
+	\lambda &= 0.003 \\
+\end{align*}
+Since our bias voltage is DC coupled to the output of the previous stage, our $V_G = 2.7 V$. 
+So we can calculate that $I_D = 3.4 mA, g_m = .012, r_o = 98k$. $R_{out} = 45 \Omega$
 \subsection*{Bias Voltages/Currents}
 \begin{tabular}{|r|l|l|}
 \hline
