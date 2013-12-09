@@ -1,0 +1,769 @@
+\documentclass[11pt, twoside, letterpaper]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin=0.6in]{geometry}
+\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{../../placeins}
+\usepackage{../../mcode}
+
+\title{EE105 Mini Project: AM Radio}
+\author{Michael Lin and Jene Li}
+\date{\today}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\newcommand\Laplace{\mathcal{L}}
+\newcommand\Taylor{\mathcal{T}}
+
+\section{Abstract}
+The objective of this lab is to achieve simultaneous control of both the angular position of the pendulum
+and horizontal position of the cart on the track using full-state feedback. We will be considering small
+angle perturbations and sine wave reference tracking of the cart position. Note that the system is a SIMO
+- a Single Input Multiple Output - system, since we are trying to control both the position of the cart
+and the angle of the pendulum (two outputs) by using only the motor voltage (one input).
+
+\section{Theory}
+The setup consist of a pendulum attached to a movable cart as illustrated in Figure 1. In this picture
+we analyze the free body diagram to understand the dynamics of the system better. We ignore friction
+and assume that the center of mass of the pendulum is at the center of the pendulum (indicated with
+$L_p$ in Figure 1)
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=3in]{FreeBodyDiagramOfPendulum.png}
+\caption{Free body diagram of the inverted pendulum setup (ignoring friction)}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+N and P are the horizontal and vertical components, respectively, of the reaction force between the cart and the
+pendulum. The parameter values of the physical system are given in Table 1.
+
+\begin{tabular}{|r|l|l|}
+\hline
+Parameter & Value & Description\\
+\hline
+&439.6 counts/cm &Resolution of the cart position encoder\\
+\hline
+&666.7 counts/cm &Resolution of the angle encoder\\
+\hline
+M&0.94kg &Mass of cart and motor\\
+\hline
+m&0.23kg &Mass of pendulum\\
+\hline
+$L_p$&0.3302 m&Pendulum distance from pivot to center of mass\\
+\hline
+$I_c$&m$\frac{L_p^2}{3}$&Moment of inertia of pendulum about its center\\
+\hline
+$I_e$&4m$\frac{L_p^2}{3}$&Moment of inertia of pendulum about its end\\
+\hline
+$K_t$&7.67*$10^{-3}$ $\frac{Nm}{A}$&Motor torque constant\\
+\hline
+$K_m$&7.67*$10^{-3}$ $\frac{Vs}{rad}$&Motor back EMF constant\\
+\hline
+$K_g$&3.71 &Motor gearbox ratio\\
+\hline
+$R_m$&2.6$\Omega$&Motor winding resistance\\
+\hline
+r& 6.36$*10^{-3}$m& Radiums of motor gear\\
+\hline
+$J_m$& 3.9$*10^{-7}kg*m^2$& Motor moment of inertia\\
+\hline
+\end{tabular}
+\begin{center}
+Table 1: Parameter of the inverted pendulum setup
+\end{center}
+
+\section{Pre-Lab}
+\subsection{Equations of Motion of the Mechanical System}
+The equations of motion we use to represent our cart system, using the small-angle linear
+approximations $\sin{\theta}\approx \theta$ and $\cos{\theta}\approx 1$, are the following:
+\begin{align}
+(m_c+m)\ddot{x}+mL_p\ddot{\theta}&=F_a\\
+mL_p\ddot{x}+\frac{4mL_p^2}{3}\ddot{\theta}-mgL_p\theta &= 0
+\end{align}
+Where $m_c$ is the mass of the cart, $m$ is the mass of the pendulum,
+$L_p$ is half the length of the pendulum, $\theta$ is the angle shown in
+figure 1 and x is the position of the cart also shown in figure 1.
+
+We obtain these representation by looking at the free body diagrams and setting up 
+a system of equations:\\
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=4in, height=1in]{FBDiagLinearMotion.png}
+\caption{Linear Motion Free body diagram of the cart (ignoring friction)}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+From Figure 2 we can derive the equation using sum of forces on the cart.
+\begin{equation}
+\sum F: F_a=N+m_c\ddot{x}
+\end{equation}
+
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=2in, height=2in]{FBDiagRotationalMotion.png}
+\caption{Rotational Motion Free body diagram of the pendulum}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+From Figure 3 we can derive another equation using sum of forces on the cart.
+In this case, we used a different approach and used Newton's equation with the 
+net acceleration of the pendulum to find N.
+
+\begin{align}
+N &= ma'
+\end{align}
+\begin{align*}
+a'&= \ddot{x}+\frac{d^2(l)}{dt^2}\\
+ &= \ddot{x}+L_p\ddot{\theta}\cos{\theta}\\
+ &= \ddot{x}+L_p\ddot{\theta}\\
+\end{align*}
+\begin{equation}
+N = m(\ddot{x}+L_p\ddot{\theta})
+\end{equation}
+Using equation (5) in equation (3) we get:
+\begin{equation}
+F_a=m(\ddot{x}+L_p\ddot{\theta})+m_c\ddot{x}
+\end{equation}
+Where equation (6) is one of the equations of motion (1).
+
+Then further analyzing Figure 3, we can derive a rotational motion equation. The derivation
+comes from a sum of torques along the axis perpendicular to the pendulum's length and at the
+center of mass. \\
+We get 3 forces that act on the pendulum at its center of mass: weight of the pendulum, acceleration
+of the system and its rotational inertia.\\
+\begin{align*}
+\sum \Taylor: m\ddot{x}\cos{\theta}L_p+I\ddot{\theta}-mg\sin{\theta}L_p=0
+\end{align*}
+Where I is the moment of inertia of the pendulum. The $\cos{\theta}$ and $\sin{\theta}$ come from the
+acceleration of the system and its weight being at an angle compared to the perpendicular of the length of the pendulum.\\
+\begin{align*}
+L&=2L_p\\
+I&=\frac{mL^2}{3}\\
+&=\frac{4mL_p^2}{3}
+\end{align*}
+Knowing the equation for rotational inertia of the pendulum and using the small angle linear approximations, we get:\\
+\begin{equation}
+\sum \Taylor: m\ddot{x}L_p + \frac{4mL_p^2}{3}\ddot{\theta} - mg\theta L_p=0
+\end{equation}
+Which is equation (2) of the equations of motion.
+
+\subsection{Full System Dynamics of Linearized System}
+\begin{enumerate}
+\item Integrating motor dynamics\\
+As obtained from Lab3:
+
+\begin{equation}
+(R_mr^2m_c+K_g^2J_mR_m)\ddot{x}(t)+K_tK_g^2K_m\dot{x}(t)=K_tK_grV(t)
+\end{equation}
+
+\begin{align*}
+\ddot{x}(t) &= \frac{K_tK_grV(t)}{R_mr^2m_c+K_g^2J_mR_m}-\frac{K_tK_g^2K_m\dot{x}(t)}{R_mr^2m_c+K_g^2J_mR_m}\\
+F_a=m_c\ddot{x}(t) &= \frac{m_cK_tK_grV(t)-m_cK_tK_g^2K_m\dot{x}(t)}{R_mr^2m_c+K_g^2J_mR_m}
+\end{align*}
+Using equation (1) we have\\
+\begin{equation}
+(m_c+m)\ddot{x}(t) +mL_p\ddot{\theta} = m_c\frac{(K_tK_grV(t)-K_tK_g^2K_m\dot{x}(t))}{R_mr^2m_c+K_g^2J_mR_m}
+\end{equation}
+To make calculation easier, we use variables to hold the group of constants\\
+\begin{align*}
+\alpha &= K_tK_gr\\
+\beta &=K_tK_g^2K_m\\
+\gamma &= R_mr^2m_c+K_g^2J_mR_m
+\end{align*}
+Which leave equation 9 as\\
+\begin{equation}
+\ddot{x}(t) = m_c\frac{(\alpha V(t)-\beta \dot{x}(t))}{(m_c+m)\gamma}-\frac{mL_p\ddot{\theta}}{(m_c+m)}\\
+\end{equation}
+Now, using equation (2) we rewrite it as 
+\begin{equation}
+\ddot{\theta} = \frac{3g\theta}{4L_p}-\frac{3\ddot{x}}{4L_p}
+\end{equation}
+We plug in equation (11) into (10) to obtain an equation for
+$\ddot{x}$ in terms of $\dot{x}$ and V and $\theta$
+\begin{align*}
+\ddot{x} = m_c\frac{(\alpha V(t)-\beta \dot{x}(t))}{(m_c+m)\gamma}-\frac{mL_p}{(m_c+m)}(\frac{3g\theta-3\ddot{x}}{4})\\
+\ddot{x}(1-\frac{3m}{4(m_c+m)}) = m_c\frac{(\alpha V(t)-\beta \dot{x}(t))}{(m_c+m)\gamma}-\frac{3mg\theta}{4(m_c+m)}\\
+\ddot{x}(\frac{4m_c+m}{4(m_c+m)}) = m_c\frac{(\alpha V(t)-\beta \dot{x}(t))}{(m_c+m)\gamma}-\frac{3mg\theta}{4(m_c+m)}\\
+\ddot{x} = \frac{4m_c(\alpha V(t)-\beta \dot{x}(t))}{(4m_c+m)\gamma}-\frac{3mg\theta}{(4m_c+m)}
+\end{align*}
+
+The equation we obtain is
+\begin{equation}
+\ddot{x} = \frac{4m_c(K_tK_gr V(t)-K_tK_g^2K_m \dot{x}(t))}{(4m_c+m)(R_mr^2m_c+K_g^2J_mR_m)}-\frac{3mg\theta}{(4m_c+m)}
+\end{equation}
+
+Plugging this equation back into equation (11) will yield an equation 
+for $\ddot{\theta}$
+\begin{align*}
+\ddot{\theta} &= \frac{3g\theta}{4L_p}-\frac{3(\frac{4m_c(K_tK_gr V(t)-K_tK_g^2K_m \dot{x}(t))}{(4m_c+m)(R_mr^2m_c+K_g^2J_mR_m)}-\frac{3mg\theta}{(4m_c+m)})}{4L_p}\\
+\ddot{\theta} &= \frac{3g\theta}{4L_p}(1+\frac{3m}{4m_c+m}) - \frac{12m_c(K_tK_gr V(t)-K_tK_g^2K_m \dot{x}(t))}{4L_p(4m_c+m)(R_mr^2m_c+K_g^2J_mR_m)}\\
+\end{align*}
+\begin{equation}
+\ddot{\theta} = \frac{3g\theta}{L_p}(\frac{m_c+m}{4m_c+m}) - \frac{3m_c(K_tK_gr V(t)-K_tK_g^2K_m \dot{x}(t))}{L_p(4m_c+m)(R_mr^2m_c+K_g^2J_mR_m)}
+\end{equation}
+
+\item Deriving the state space model\\
+We use as state vector $x=\begin{bmatrix} x &\dot{x} &\theta &\dot{\theta} \end{bmatrix}^T$
+We want to find matrices A, B, C and D of the equations\\
+\begin{align*}
+\dot{x} = Ax + Bu\\
+y = Cx + Du\\
+\end{align*}
+Using equations (12) and (13) we get that\\
+\begin{align*}
+A = 
+\begin{bmatrix}
+0 &1 &0 &0\\
+0 &a_1 &a_2 &0\\
+0 &0 &0 &1\\
+0 &a_3 &a_4 &0
+\end{bmatrix}\\
+a_1 &= \frac{-4m_cK_tK_g^2K_m}{(R_mr^2m_c+Kg^2J_mR_m)(4m_c+m)}\\
+a_2 &= \frac{-3mg}{4m_c+m}\\
+a_3 &= \frac{3m_cK_tK_g^2K_m}{L_p(4m_c+m)(R_mr^2m_c+Kg^2J_mR_m)}\\
+a_4 &= \frac{3g(m_c+m)}{L_p(4m_c+m)}\\
+\\
+B = 
+\begin{bmatrix}
+0\\ b_1\\ 0 \\ b_2
+\end{bmatrix}\\
+b_1 &= \frac{4m_cK_tK_gr}{(R_mr^2m_c+Kg^2J_mR_m)(4m_c+m)}\\
+b_2 &= \frac{-3m_cK_tK_gr}{L_p(R_mr^2m_c+Kg^2J_mR_m)(4m_c+m)}
+\end{align*}
+
+We found matrix C by inspection. Since we have a 2 output system of position
+and angle.
+\begin{align*}
+C = 
+\begin{bmatrix}
+1 &0 &0 &0\\
+0 &0 &1 &0
+\end{bmatrix}
+D =
+\begin{bmatrix}
+0\\0
+\end{bmatrix}
+\end{align*}
+\end{enumerate}
+
+\subsection{Analysis and Controller Design}
+\begin{enumerate} 
+
+\item Stability of the system A\\
+We used the following code
+\begin{lstlisting}
+%%All the system variables
+mc = 0.94;
+m = 0.23;
+lp = 0.3302;
+kt = 7.67e-3;
+km = 7.67e-3;
+kg = 3.71;
+rm = 2.6;
+r = 6.36e-3;
+jm = 3.9e-7;
+g = 9.81;
+
+
+a1 = (-4*mc*kt*kg^2*km)/((rm*r^2*mc+kg^2*jm*rm)*(4*mc+m));
+a2 = (-3*m*g)/(4*mc+m);
+b1 = (4*mc*kt*kg*r)/((rm*r^2*mc+kg^2*jm*rm)*(4*mc+m));
+a3 = -(3*a1)/(4*lp);
+a4 = ((3*g)/(lp))*((mc+m)/(4*mc+m));
+b2 = -3*b1/(4*lp);
+
+%%Step response of the state space system
+A = [0 1 0 0; 0 a1 a2 0; 0 0 0 1; 0 a3 a4 0];
+B = [0; b1; 0; b2];
+C = [1 0 0 0; 0 0 1 0];
+D = [0; 0];
+sys = ss(A,B,C,D);
+eig(A)
+\end{lstlisting}
+Which yield
+\begin{align*}
+\lambda_1 &= 0\\
+\lambda_2 &= -7.463\\
+\lambda_3 &= -3.3\\
+\lambda_4 &= 4
+\end{align*}
+So the system is not internally stable as we can see from the positive eigen value. If the system is internally unstable then it is not BIBO stable either.
+\newpage
+\item Step response
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=3in]{StepRespSystem.png}
+\caption{Step response of the open loop system}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+We expected the cart to just accelerate exponentially due to its unstability, and the angle of the pendulum to be at something between 180 and 270 degrees from physical intuition. However, we see from the bottom plot in Figure 4 that the output of angle just keeps decreasing, as if the pendulum exponentially spun around. These discrepancies are due to the small angle approximation. Our model of the system breaks once the angle of the pendulum varies widely.
+
+\item Finding the controller parameters
+\begin{enumerate}
+\item
+\begin{align*}
+A_k &= 
+\begin{bmatrix}
+0 &1 &0 &0\\
+0 &a_1 &a_2 &0\\
+0 &0 &0 &1\\
+0 &a_3 &a_4 &0
+\end{bmatrix}
+- 
+\begin{bmatrix}
+0\\ b_1\\ 0 \\ b_2
+\end{bmatrix}
+\begin{bmatrix}
+K_1 & K_2 &K_3 & K_4
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+0 &1 &0 &0\\
+0 &a_1 &a_2 &0\\
+0 &0 &0 &1\\
+0 &a_3 &a_4 &0
+\end{bmatrix}
+-
+\begin{bmatrix}
+0 &0 &0 &0\\
+b_1k_1 &b_1k_2 &b_1k_3 &b_1k_4\\
+0 &0 &0 &0\\
+b_2k_1 &b_2k_2 &b_2k_3 &b_2k_3
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+0 &1 &0 &0\\
+-b_1k_1 &a_1-b_1k_2 &a_2-b_1k_3 &-b_1k_4\\
+0 &0 &0 &1\\
+-b_2k_1 &a_3-b_2k_2 &a_4-b_2k_3 &-b_2k_4
+\end{bmatrix}\\
+\end{align*}
+
+\item
+\begin{align*}
+det(sI-A_k) &= 
+\begin{vmatrix}
+s &-1 &0 &0\\
+b_1k_1 &s-(a_1-b_1k_2) &-(a_2-b_1k_3) &b_1k_4\\
+0 &0 &s &-1\\
+b_2k_1 &-(a_3-b_2k_2) &-(a_4-b_2k_3) &s+b_2k_4
+\end{vmatrix}\\
+&= s\begin{vmatrix}
+s-(a_1-b_1k_2) &-(a_2-b_1k_3) &b_1k_4\\
+0 &s &-1\\
+-(a_3-b_2k_2) &-(a_4-b_2k_3) &s+b_2k_4
+\end{vmatrix}\\
+&+
+\begin{vmatrix}
+b_1k_1 &-(a_2-b_1k_3) &b_1k_4\\
+0 &s &-1\\
+b_2k_1 &-(a_4-b_2k_3) &s+b_2k_4
+\end{vmatrix}\\
+&= s(s
+\begin{vmatrix}
+s-(a_1-b_1k_2) &b_1k_4\\
+-(a_3-b_2k_2) &s+b_2k_4
+\end{vmatrix}
++
+\begin{vmatrix}
+s-(a_1-b_1k_2) &-(a_2-b_1k_3) \\
+-(a_3-b_2k_2) &-(a_4-b_2k_3) 
+\end{vmatrix})\\
+&+(s
+\begin{vmatrix}
+b_1k_1 &b_1k_4\\
+b_2k_1 &s+b_2k_4
+\end{vmatrix}+
+\begin{vmatrix}
+b_1k_1 &-(a_2-b_1k_3) \\
+b_2k_1 &-(a_4-b_2k_3) 
+\end{vmatrix})\\
+&=s(s((s-(a_1-b_1k_2))(s+b_2k_4)-(b_2k_2-a_3)(b_1k_4))\\
+&+(s-(a_1-b_1k_2))(b_2k_3-a_4)-(b_2k_2-a_3)(b_1k_3-a_2))\\
+&+s(b_1k_1(s+b_2k_4)-b_1k_4b_2k_1)+b_1k_1(b_2k_3-a_4)-b_2k_1(b_1k_3-a_2)\\
+&=s^4\\
+&+ s^3(b_1k_2-a_1+b_2k_4)\\
+&+ s^2(-a_1b_@k_4+a_3b_1k_4+b_2k_3-a_4+b_1k_1)\\
+&+ s(-a_1b_2k_3-a_4b_1k_2+a_1a_4+a_2b_2k_2+a_3b_1k_3-a_2a_3)\\
+&+ -a_4b_1k_1+a_2b_2k_1
+\end{align*}
+
+\item
+\begin{align*}
+P_{desired}(s) &= (s+1.9+10j)(s+1.9-10j)(s+1.6+1.3j)(s+1.6-1.3j)\\
+&= s^4+7s^3+120.02s^2+347.7s+440.343
+\end{align*}
+
+\item
+System of equations:\\
+\begin{align*}
+b_1k_2-a_1+b_2k_4=7\\
+-a_1b_2k_4+a_3b_1k_4+b_2k_3+a_4+b_1k_1=120.02\\
+-a_1b_2k_3-a_4b_1k_2+a_1a_4+a_2b_2k_2+a_3b_1k_3-a_2a_3=347.7\\
+-a_4b_1k_1+a_2b_2k_1=440.343
+\end{align*}
+We solve the equations using the following matlab code:\\
+\begin{lstlisting}
+%%Calculating K
+%Ak=b
+%Matrix variables from before
+A = [0 b1 0 b2;
+    b1 0 b2 (a3*b1-a1*b2);
+    0 (a2*b2-a4*b1) (a3*b1-a1*b2) 0;
+    (a2*b2-a4*b1) 0 0 0];
+b = [(7+a1);
+    (120.02+a4);
+    (347.7+a2*a3-a1*a4);
+    440.343];
+EQ = [A b];
+K = rref(EQ);
+K = transpose(K(:,5));
+\end{lstlisting}
+And we obtained 
+\begin{align*}
+K_1 &= -13.07\\
+K_2 &= -14.797\\
+K_3 &= -48.32\\
+K_4 &= -6.5832
+\end{align*}
+
+\item The MATLAB function acker and palce yield the same answers
+\begin{lstlisting}
+A = [0 1 0 0; 0 a1 a2 0; 0 0 0 1; 0 a3 a4 0];
+B = [0; b1; 0; b2];
+p = [-1.9-10j -1.9+10j -1.6+1.3j -1.6-1.3j];
+acker(A,B,p)
+\end{lstlisting}
+\end{enumerate}
+\newpage
+\item
+\begin{lstlisting}
+%%Calculating the transfer function from position to first entry of
+%%reference
+%{
+A = [0 1 0 0; 0 a1 a2 0; 0 0 0 1; 0 a3 a4 0];
+B = [0; b1; 0; b2];
+C = [1 0 0 0; 0 0 1 0];
+s = tf('s');
+I = eye(4);
+Ak = A-B*K;
+Bk = B*K;
+cP = s*I-Ak;
+res = C*inv(cP)*Bk;
+TF = res(1,1);
+bode(TF);
+%}
+%TF = (2582198659785424896*(5602496892272651*s + 40167321033965600))/
+%(32384511427705547991361089699840*s^4 + %226691579993938835939527627898880*s^3 
+%+ 3886789061553217819183710131909780*s^2 + 11260094623413207023989484979211211*s +
+% 14260292915610155053390151220638220) - (9094847972918903655*(70368744177664*s^2 
+%+ 1590654402333619*s + 9836306213346796))/(32384511427705547991361089699840*s^4 +
+% 226691579993938835939527627898880*s^3 + 3886789061553217819183710131909780*s^2 +
+% 11260094623413207023989484979211211*s + 14260292915610155053390151220638220)
+\end{lstlisting}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=3in]{TFBode.png}
+\caption{Bode plot of the system with the controller}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\end{enumerate} 
+
+\newpage
+\section{Procedure}
+\subsection{Implementing the Controller in Simulink}
+We implemented the state-feedback controller with the Quanser I/O blocks in Simulink.  The figure below shows the Simulink block diagram we constructed.
+
+\textbf{Note about Gear Protection:}
+In order to prevent the gears on the cart from slipping from the rails, we added a saturation block before the Analog Output block using a saturation block set to $\pm6V$ in Simulink.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=7in, height=4.5in]{BlockDiagramController.jpg}
+\caption{Simulink block diagram of our Controller in Simulink using Quanser I/O blocks}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\subsection{Running the Controller on the Hardware}
+\subsubsection{Initial Setup}
+The reference \textbf{r} was set to \textbf{r}=$ \begin{bmatrix} 0 & 0 & 0 &0 \end{bmatrix}^T$.  Before running the controller on the hardware, we built the Simulink diagram on the software, and held the pendulum vertically from the cart.  This step is conducted so that the controller stabilizes the unstable equilibrium $\theta = 0$, and the encoder position resets itself to 0 each time we connect to the hardware system.  As the controller tries to balance at 0, if the pendulum was not held up vertically, and we ran the hardware with the pendulum at its stable equilibrium position, the system would result in drastic, unaccounted "jumps" in the system from unexpected startups.
+
+\subsubsection{Small Perturbations of the Pendulum}
+We ran the controller on the hardware, starting the cart in the center of the track to ensure that there is enough space for the cart to move left and right as it stabilizes itself when disrupted by perturbations from the pendulum.  With the controller running on the hardware, and the pendulum balancing, we manually applied small perturbations to the pendulum to test the response of the system.  As we perturb the pendulum, the Simulink block diagram collects data of the cart and pendulum position with respect to time.  With this data, we are able to plot position-time graphs, both of the cart and pendulum position to analyze the controller's general performance.
+
+\subsubsection{Introducing a sine wave reference signal}
+Repeating the same procedure, we collected more data of the controller system, however, instead of a reference input signal of \textbf{r}=$ \begin{bmatrix} 0 & 0 & 0 &0 \end{bmatrix}^T$, our reference signal is now \textbf{r}=$ \begin{bmatrix} Msin\omega t & 0 & 0 &0 \end{bmatrix}^T$, with initial amplitude $M=0.1m$.  The values of $\omega$ we used in each data test were 1, 2 and 5 $rad/s$.  Now, we analyze the new response and behavior of the controller with its new parameters and reference input signal.
+
+Note: Our controller,as shown in the prelab, was designed with desired poles at $-1.9\pm10j$ and $-1.6\pm1.3j$.
+
+\begin{itemize}
+\item \textbf{Obtaining the Gain and Phase for each $\omega$:}
+Using the frequency response generated by our data, we calculated the gain and phase for each value of $\omega$.  In addition, we compared the results from the lab with our bode plots from our Pre-Lab part 3.3.4
+
+\item \textbf{Changing the position of the desired closed-loop poles:}
+Subsequently, we slightly changed the position of our desired closed-loop poles, and re-ran the experiment to see how the new positions of the poles would affect the response and behavior of the system.
+\end{itemize}
+
+\subsubsection{Obtaining the cart's velocity and the pendulum's angular velocity}
+After collecting data from the respective experiments, we differentiated the cart, $x$, and pendulum's, $\theta$ position to obtain $\dot{x}$ and $\dot{\theta}$.  Using this, we plotted both the pendulum's angular velocity $\dot{\theta}$ and the cart's velocity, $\dot{x}$, against time.
+
+\newpage
+\section{Analysis}
+\subsection{Running the Controller on the Hardware}
+\subsubsection{Running the Controller}
+After setting up everything in Simulink, we uploaded everything to the cart and started the cart while the pendulum was held upright. The starting position of the pendulum is important, as the cart will try to stabilize the pendulum at the unstable equilibrium of $\theta=0$. If the pendulum is not held at this position, the cart will try to "swing" the pendulum up to that position; with no control over this, however, the cart would just hit the end of the track it runs on.
+
+\subsubsection{Response of the pendulum with small perturbations applied}
+\textbf{Question 2.1.2a):} If you perturb the top of the pendulum in a given direction, how does the controller actuate the cart? Why is this?
+
+We can see that when the pendulum was given a perturbation to the left, the cart moves to the left; as the pendulum swings left, its center of mass also moves to the left, and the cart responds by trying to move under the center of mass to "catch" it.  With this, the controller is able to stabilize the perturbations and disturbances experienced by the pendulum, by moving in the direction of the respective perturbation. \\
+
+\textbf{Question 2.1.2b):} Plot the variation of the cart and pendulum position with time for small perturbations (manually-induced) about the equilibrium value. Comment on the controller's general performance. Why does the hardware continue to oscillate about the equilibrium point?
+
+The figure below shows 10 seconds of recorded data from the cart, showing the cart's displacement along its track and the pendulum's angular displacement from its equilibrium position. We define the displacement of the cart to be positive as the cart moves forward (to the right) and negative as the cart moves backward (to the left); interestingly, counter to given documentation, we define the displacement of the pendulum to be positive as it swings counterclockwise (to the left) and negative when it swings clockwise (to the right). 
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure1.jpg}
+\caption{Plot of the cart's displacement over time with small perturbations of the pendulum}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+The hardware continues to oscillate about the equilibrium point because the controller has a slight delay between when it senses equilibrium is reached and when it stops trying to compensate, and therefore will oscillate about an equilibrium point for a while.
+
+\subsubsection{Introducing a sine wave reference signal}
+The three figures below show a sinusoidal reference input for the position of the cart of the form$x=Msin(\omega \cdot t)$for M=0.1m and $\omega = 1,2,5rad/s$, respectively; plotted for each are the displacement and velocity of the cart as well as the angular displacement of the pendulum.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure2.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum for $\omega = 1 rad/s$}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+We can observe that the plots make sense relative to each other. The velocity is leading by about 90 degrees
+and this is due to the differentiation, its like "Looking ahead". For the pendulum angle is harder to see
+but we can see that the peaks in the angle plot match with the valleys of the position plot, which make sense
+physically since the cart moving one way will make the pendulum tilt the opposite way.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure3.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum for $\omega = 2 rad/s$}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+As we increase the frequency of the sine wave we can see the behavavior mentioned above much clearer.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure4.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum for $\omega = 5 rad/s$}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+Increasing the frequency of the sine wave to 5 rad/s introduces a new interesting behavior, which is attenuating 
+the amplitude of the output. This is due to the frequency response of the system, but we will discuss this later
+in the report.
+
+\newpage
+\textbf{Question 2.1.3a):} Calculate the gain and phase for each of the frequencies in your frequency response (ignoring the offset from the hardware response). Locate these frequencies on the Bode plot from Part 3.3.4 of your Pre-Lab and compare the results. Do your values match for each frequency? If not, explain possible causes for the difference.\\
+To analyze the gain and phase change we used the following matlab script:
+\begin{lstlisting}
+%%Finding magnitude and phase
+load('SineData.mat')
+
+%w=1
+dis = sine1all.signals.values(:,1);
+t = sine1all.time;
+s1 = 0.1*sin(t);
+plot(t,dis);
+hold on
+plot(t,s1);
+
+%Truncate approx one period of the sine wave T=1
+dis_t = dis(1000:2500);
+s1_t = s1(1000:2500);
+time_t = t(1000:2500);
+
+max_dis = max(dis_t);
+min_dis = min(dis_t);
+gain1 = (max_dis-min_dis)/0.2
+
+[magx, idx] = max(dis_t);
+[magy, idy] = max(s1_t);
+px = time_t(idx);
+py = time_t(idy);
+phase_lag1 = (py-px)*(360/(2*pi)) %We divide by the period and multiply by 360 to convert to degrees
+
+%w=2
+dis = sine2all.signals.values(:,1);
+t = sine2all.time;
+s2 = 0.1*sin(2*t);
+figure;
+plot(t,dis);
+hold on
+plot(t,s2);
+
+%Truncate approx one period of the sine wave T=1
+dis_t = dis(1200:1800);
+s2_t = s2(1200:1800);
+time_t = t(1200:1800);
+
+max_dis = max(dis_t);
+min_dis = min(dis_t);
+gain2 = (max_dis-min_dis)/0.2
+
+[magx, idx] = max(dis_t);
+[magy, idy] = max(s2_t);
+px = time_t(idx);
+py = time_t(idy);
+phase_lag2 = (py-px)*(360/pi) %We divide by the period and multiply by 360 to convert to degrees
+
+%w=5
+dis = sine5all.signals.values(:,1);
+t = sine5all.time;
+s3 = 0.1*sin(5*t);
+figure;
+plot(t,dis);
+hold on
+plot(t,s3);
+
+%Truncate waves to make it easier to find phase shift
+dis_t = dis(1200:1800);
+s3_t = s3(1200:1800);
+time_t = t(1200:1800);
+
+max_dis = max(dis_t);
+min_dis = min(dis_t);
+gain5 = (max_dis-min_dis)/0.2
+
+[magx, idx] = max(dis_t);
+[magy, idy] = max(s3_t);
+px = time_t(idx);
+py = time_t(idy);
+phase_lag5 = (py-px)*(5*360/(2*pi)) %We divide by the period and multiply by 360 to convert to degrees
+\end{lstlisting}
+
+The gain and phase of the outputs for each of the reference signals are G=1.49, $\phi=-33.5$deg for $\omega=1$, G=1.48, $\phi=-103.13$deg for $\omega=2$, G=0.549, $\phi=159$deg for $\omega=5$. These values, when compared to those from the Bode plot from the prelab, are very similar. If we look at the bode plot in Figure 5, at $\omega=1$ we have a gain of 0dB = 1, which is close to 1.5. The phase in the Bode plot is 313 degrees, or -47 degrees, which is very close to -33 degrees phase shift of the system. Then for $\omega=2$ the Bode plot shows a magnitude of -1.92dB=0.8, which is close to 1.48. What is important here is that the gain should have decrease theoretical, which was reflected in the systems behavior. Then we see in Figure 5 that the phase is 265 degrees or -95 degrees, which is similar to the measured -103.13 degrees. At last, for $\omega=5$ the Bode plot shows a magnitude of -7dB=0.45 which is very close to the measure 0.549 gain. In terms of phase, the Bode plot shows 203 degrees, which still closer to the measure 159 degrees. All the small discrepancies might come from the fact that we ignore friction between the cart and the track in our modelling of the system, which might create more or less gain and phase lag in the system but is not captured in our state space model.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{BodePlotControlAtw5.png}
+\caption{Example of how we measured gain a phase from the Bode Plot}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\textbf{Question 2.1.3b):} Slightly change the position of the desired closed-loop poles. Try a couple of different values and run the resulting controllers on the hardware. Again include plots of cart position, cart velocity and pendulum angle in your report. Discuss how the changes in the position of the poles affect the behavior of the system. You do not need to repeat part 3a.
+Note: the original response of the system is duplicated in Figure 14, where the poles are $-1.9\pm10j$ and $-1.6\pm1.3j$.
+The first modification we did was to move poles from $-1.9\pm10j$ to $-2.5\pm10j$, this yielded a behavior shown in Figure 12 below. This modification
+added an offset of 0.8m in the Displacement over time, as seen by comparing Figure 12 and 14. The phase doesn't have any significant change. 
+The second modification we did was to move the other two poles from $-1.6\pm1.3j$ to $-2\pm1.3j$, as a result the offset of the displacement reduced 
+back to approximately the original offset. However, the peak-to-peak gain of the displacement reduced by about 0.5m, this can be seen by comparing 
+Figure 13 with Figure 14. Similar to the previous modification, the phase of doesn't have any significant changes.
+
+\textbf{Note: for a more clear comparison of the systems look at Figure 15-17.}
+
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure5.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum with desired poles at -2.5$\pm$10j and -1.6$\pm$1.3j}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure6.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum with desired poles at -2.5$\pm$10j and -2$\pm$1.3j}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure3.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum for $\omega = 2 rad/s$ with poles at $-1.9\pm10j$ and $-1.6\pm1.3j$.}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+The three plots below show a more clear difference between all the system designed with different 
+desired poles. "First Pair Shifted" corresponds to moving poles from $-1.9\pm10j$ to $-2.5\pm10j$.
+"Both pairs shifted" corresponds to moving the other two poles from $-1.6\pm1.3j$ to $-2\pm1.3j$.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Poles-Displacement.png}
+\caption{Overlap plot of Displacement over time for both modifications}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Poles-AngularDisplacement.png}
+\caption{Overlap plot of angular displacement over time for both modifications}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Poles-Velocity.png}
+\caption{Overlap plot of velocity over time for both modifications}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\newpage
+\newpage
+\subsubsection{Plotting the cart's velocity and the pendulum's angular velocity}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in, height=4in]{Figure7.jpg}
+\caption{Plots of the Velocity of the Cart and the Angular Velocity of the Pendulum}
+\label{default}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+The figure above shows plots of the velocity of the cart and the angular velocity of the pendulum for both the runs from the run of Figure 1 and Figure 3. We can see that the signals are very noisy compared to the signals of the cart's displacement and the pendulum's angular displacement; the noise in the cart velocity may be due to the movement of the cart being driven by gear teeth catching, and the noise in the pendulum's angular velocity may be due to the jostling that the gear teeth catching causes in the cart.
+
+
+\end{document}  
