@@ -1,9 +1,213 @@
 Circuit: * /Users/MichaelLin/Documents/FA-2013-School/EE105/MiniProject/Design1v2.asc
 
 Direct Newton iteration for .op point succeeded.
+Semiconductor Device Operating Points:
+                        --- Diodes ---
+Name:    d:m13:1     d:m8:1      d:m5:1      d:m12:1     d:m11:1
+Model: m13:n3306d   m8:n3306d   m5:n3306d  m12:n3306d  m11:n3306d
+Id:     -7.15e-12   -7.15e-12   -7.15e-12   -7.15e-12   -7.15e-12
+Vd:     -2.15e+00   -2.15e+00   -2.15e+00   -2.15e+00   -2.15e+00
+Req:     1.00e+12    1.00e+12    1.00e+12    1.00e+12    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
 
-Date: Mon Dec  9 14:13:12 2013
-Total elapsed time: 0.050 seconds.
+Name:    d:m10:1     d:m9:1      d:m7:1      d:m6:1      d:m4:1
+Model: m10:n3306d   m9:n3306d   m7:n3306d   m6:n3306d   m4:n3306d
+Id:     -7.15e-12   -7.15e-12   -7.15e-12   -7.15e-12   -7.15e-12
+Vd:     -2.15e+00   -2.15e+00   -2.15e+00   -2.15e+00   -2.15e+00
+Req:     1.00e+12    1.00e+12    1.00e+12    1.00e+12    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    d:m2:1      d:m1:1      d:m3:1
+Model:  m2:n3306d   m1:n3306d   m3:n3306d
+Id:     -7.15e-12   -1.34e-11   -7.15e-12
+Vd:     -2.15e+00   -8.38e+00   -2.15e+00
+Req:     1.00e+12    1.00e+12    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00
+
+                        --- MOSFET Transistors ---
+Name:        m:m13:1     m:m8:1      m:m5:1      m:m12:1     m:m11:1
+Model:     m13:n3306m   m8:n3306m   m5:n3306m  m12:n3306m  m11:n3306m
+Id:          6.23e-03    6.23e-03    6.23e-03    6.23e-03    6.23e-03
+Vgs:         2.15e+00    2.15e+00    2.15e+00    2.15e+00    2.15e+00
+Vds:         2.15e+00    2.15e+00    2.15e+00    2.15e+00    2.15e+00
+Vbs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Vth:         1.82e+00    1.82e+00    1.82e+00    1.82e+00    1.82e+00
+Vdsat:       3.18e-01    3.18e-01    3.18e-01    3.18e-01    3.18e-01
+Gm:          3.92e-02    3.92e-02    3.92e-02    3.92e-02    3.92e-02
+Gds:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Gmb:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbd:         1.97e-11    1.97e-11    1.97e-11    1.97e-11    1.97e-11
+Cbs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgsov:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgdov:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgbov:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgd:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgb:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:        m:m10:1     m:m9:1      m:m7:1      m:m6:1      m:m4:1
+Model:     m10:n3306m   m9:n3306m   m7:n3306m   m6:n3306m   m4:n3306m
+Id:          6.23e-03    6.23e-03    6.23e-03    6.23e-03    6.23e-03
+Vgs:         2.15e+00    2.15e+00    2.15e+00    2.15e+00    2.15e+00
+Vds:         2.15e+00    2.15e+00    2.15e+00    2.15e+00    2.15e+00
+Vbs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Vth:         1.82e+00    1.82e+00    1.82e+00    1.82e+00    1.82e+00
+Vdsat:       3.18e-01    3.18e-01    3.18e-01    3.18e-01    3.18e-01
+Gm:          3.92e-02    3.92e-02    3.92e-02    3.92e-02    3.92e-02
+Gds:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Gmb:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbd:         1.97e-11    1.97e-11    1.97e-11    1.97e-11    1.97e-11
+Cbs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgsov:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgdov:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgbov:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgd:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgb:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:        m:m2:1      m:m1:1      m:m3:1
+Model:      m2:n3306m   m1:n3306m   m3:n3306m
+Id:          6.23e-03    6.23e-03    6.23e-03
+Vgs:         2.15e+00    2.15e+00    2.15e+00
+Vds:         2.15e+00    8.38e+00    2.15e+00
+Vbs:         0.00e+00    0.00e+00    0.00e+00
+Vth:         1.82e+00    1.82e+00    1.82e+00
+Vdsat:       3.18e-01    3.18e-01    3.18e-01
+Gm:          3.92e-02    3.92e-02    3.92e-02
+Gds:         0.00e+00    0.00e+00    0.00e+00
+Gmb:         0.00e+00    0.00e+00    0.00e+00
+Cbd:         1.97e-11    1.14e-11    1.97e-11
+Cbs:         0.00e+00    0.00e+00    0.00e+00
+Cgsov:       0.00e+00    0.00e+00    0.00e+00
+Cgdov:       0.00e+00    0.00e+00    0.00e+00
+Cgbov:       0.00e+00    0.00e+00    0.00e+00
+Cgs:         0.00e+00    0.00e+00    0.00e+00
+Cgd:         0.00e+00    0.00e+00    0.00e+00
+Cgb:         0.00e+00    0.00e+00    0.00e+00
+
+
+Operating Bias Point Solution:
+        V(n022)                  0   voltage
+        V(vinb)                  0   voltage
+        V(n001)                  0   voltage
+        V(n023)                  0   voltage
+        V(n020)                  0   voltage
+        V(n007)                  0   voltage
+        V(vout)                  0   voltage
+        V(n002)                  0   voltage
+       V(vout2)                  0   voltage
+        V(n019)                  0   voltage
+        V(n008)                  0   voltage
+        V(n003)                  0   voltage
+       V(vout3)                  0   voltage
+        V(n015)                  0   voltage
+        V(n009)                  0   voltage
+        V(n004)                  0   voltage
+       V(vout4)                  0   voltage
+        V(n016)                  0   voltage
+        V(n010)                  0   voltage
+        V(n005)                  0   voltage
+        V(n013)                  0   voltage
+        V(n017)                  0   voltage
+        V(n011)                  0   voltage
+        V(n021)                  0   voltage
+       V(vout6)                  0   voltage
+        V(n014)                  0   voltage
+        V(p001)                  0   voltage
+        V(p002)                  0   voltage
+        V(p003)                  0   voltage
+        V(p004)                  0   voltage
+        V(p005)                  0   voltage
+        V(n006)                  0   voltage
+        V(n018)                  0   voltage
+        V(n012)                  0   voltage
+        V(p006)                  0   voltage
+          I(C8)        8.21565e-31   device_current
+          I(C5)             -9e-17   device_current
+          I(C7)        6.22585e-18   device_current
+          I(C6)        9.16156e-30   device_current
+          I(C4)        1.02274e-29   device_current
+          I(C3)        9.62341e-30   device_current
+          I(C1)       -2.07443e-28   device_current
+          I(C2)       -2.77416e-17   device_current
+         I(R33)         0.00622584   device_current
+         I(R32)        1.55431e-18   device_current
+         I(R31)         0.00622584   device_current
+         I(R19)         0.00622584   device_current
+         I(R18)         0.00622584   device_current
+          I(R1)       -2.59037e-17   device_current
+         I(R30)         0.00622584   device_current
+         I(R29)         0.00622584   device_current
+         I(R27)         0.00622584   device_current
+         I(R26)         0.00622584   device_current
+         I(R28)         0.00622584   device_current
+         I(R13)        2.77416e-17   device_current
+         I(R20)         0.00622585   device_current
+         I(R25)        6.22585e-18   device_current
+         I(R24)                  0   device_current
+         I(R23)         0.00622584   device_current
+         I(R22)         0.00622584   device_current
+         I(R21)         0.00622584   device_current
+         I(R17)        1.55431e-18   device_current
+         I(R16)         0.00622584   device_current
+         I(R15)         0.00622584   device_current
+         I(R14)         0.00622584   device_current
+         I(R12)        1.55431e-18   device_current
+         I(R10)         0.00622584   device_current
+          I(R9)         0.00622584   device_current
+          I(R5)         0.00622584   device_current
+         I(R11)        1.55431e-18   device_current
+          I(R8)         0.00622584   device_current
+          I(R7)         0.00622584   device_current
+          I(R6)         0.00622584   device_current
+          I(R2)         0.00622584   device_current
+          I(R4)         0.00622584   device_current
+          I(R3)         0.00622584   device_current
+         I(Vin)        2.77416e-17   device_current
+          I(V1)          -0.080936   device_current
+       Ix(m3:3)         0.00622584   subckt_current
+       Ix(m3:4)                  0   subckt_current
+       Ix(m3:5)        -0.00622584   subckt_current
+       Ix(m1:3)         0.00622585   subckt_current
+       Ix(m1:4)       -3.28955e-18   subckt_current
+       Ix(m1:5)        -0.00622585   subckt_current
+       Ix(m2:3)         0.00622584   subckt_current
+       Ix(m2:4)                  0   subckt_current
+       Ix(m2:5)        -0.00622584   subckt_current
+       Ix(m4:3)         0.00622584   subckt_current
+       Ix(m4:4)                  0   subckt_current
+       Ix(m4:5)        -0.00622584   subckt_current
+       Ix(m6:3)         0.00622584   subckt_current
+       Ix(m6:4)                  0   subckt_current
+       Ix(m6:5)        -0.00622584   subckt_current
+       Ix(m7:3)         0.00622584   subckt_current
+       Ix(m7:4)                  0   subckt_current
+       Ix(m7:5)        -0.00622584   subckt_current
+       Ix(m9:3)         0.00622584   subckt_current
+       Ix(m9:4)                  0   subckt_current
+       Ix(m9:5)        -0.00622584   subckt_current
+      Ix(m10:3)         0.00622584   subckt_current
+      Ix(m10:4)                  0   subckt_current
+      Ix(m10:5)        -0.00622584   subckt_current
+      Ix(m11:3)         0.00622584   subckt_current
+      Ix(m11:4)                  0   subckt_current
+      Ix(m11:5)        -0.00622584   subckt_current
+      Ix(m12:3)         0.00622584   subckt_current
+      Ix(m12:4)        3.28955e-18   subckt_current
+      Ix(m12:5)        -0.00622584   subckt_current
+       Ix(m5:3)         0.00622584   subckt_current
+       Ix(m5:4)                  0   subckt_current
+       Ix(m5:5)        -0.00622584   subckt_current
+       Ix(m8:3)         0.00622584   subckt_current
+       Ix(m8:4)                  0   subckt_current
+       Ix(m8:5)        -0.00622584   subckt_current
+      Ix(m13:3)         0.00622584   subckt_current
+      Ix(m13:4)                  0   subckt_current
+      Ix(m13:5)        -0.00622584   subckt_current
+
+
+Date: Mon Dec  9 14:41:50 2013
+Total elapsed time: 0.006 seconds.
 
 tnom = 27
 temp = 27
@@ -16,6 +220,4 @@ rejected = 0
 matrix size = 89
 fillins = 24
 solver = Normal
-Matrix Compiler1:     671 opcodes
-Matrix Compiler2:     734 opcodes
 

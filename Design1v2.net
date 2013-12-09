@@ -81,6 +81,6 @@ D1 5 3 N3306D
 +                Tr=233.7n Tf=466.5p Itf=0 Vtf=0 Xtf=0 Rb=10)
 *                Fairchild        pid=2N4400      case=TO92
 *                88-09-13 bam    creation
-.ac dec 500 100 10k
+.op
 .backanno
 .end
