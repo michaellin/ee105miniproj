@@ -28,8 +28,7 @@
 \section{Topology}
 \subsection{MOSFET vs BJT}
 
-The first decision we made was to use MOSFETS rather than BJTs because while they had lower gain than BJTs (the $g_m$ of MOSFETS
-is in the order of $10^{-3}$ compared to the BJT's $0.038$), the large gate impedance of MOS proved more attractive since we dont have to
+The first decision we made was to use MOSFETS rather than BJTs because the large gate impedance of MOS proved more attractive since we dont have to
 worry much about impedance loading between stages. As for the specific MOS, we used the BS170 N-channel MOSFETs because they had high saturation
 current capacity and, thus, a higher $g_m$ and gain.
 
@@ -55,14 +54,16 @@ will amplify and rail this difference.
 \subsubsection{Common Sources}
 After some more consideration, we decided to use multiple stages of common source topologies as the one shown in Figure 3 because they would 
 be much easier to bias than cascode stage. Our first decision was to choose a desired drain current and the gain and $V_{outBIAS}$
-would depend on this current. We will go through this calculations in a later section, through educated guess and some trial and errors we 
+would depend on this current. We will go through this calculations in a later section, but through educated guess and some trial and errors we 
 chose a drain current of 6mA. Drain current is set by using a current mirror, as shown in Figure 3. Then we choose our drain 
-resistance such that we get a well centered $V_{outBIAS}$. In our case, we chose $R_D=1000k\Omega$, so the voltage drop on the resistor would be 
-6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned out to be low due to this small $R_D$ and inconsistent across different 
-BS170, probably due to their mismatch in $\frac{W}{L}$, in fact, it was a gain ranging from 5 to 10. However, since we did not have inter-stage loading 
-gain loss due to the infinite gate impedance of the common sources, cascading multiple of this topologies increased our gain exponentially by a factor
-of 5 to 10 every stage. So five stages were enough to reach a gain of over 12500. Besides the drain resistor, we also added a $100\Omega$ resistor 
-at the source to stabilize the gate to source voltage.
+resistance such that we get this 6mA and a well centered $V_{outBIAS}$(as we'll show later in the hand calculations). In our case, we chose 
+$R_D=1000k\Omega$, so the voltage drop on the resistor would be 6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned 
+out to be low due to this small $R_D$ and inconsistent across different BS170, probably due to their mismatch in $\frac{W}{L}$, in fact, it 
+was a gain ranging from 5 to 10. However, since we did not have inter-stage loading gain loss due to the infinite gate impedance of the common 
+sources, cascading multiple of this topologies increased our gain exponentially by a factor of 5 to 10 every stage. So five stages were enough 
+to reach a gain of over 12500. Besides the drain resistor, we also added a $100\Omega$ resistor at the source to stabilize the gate to source voltage.
+Then the 100k resistor used between the gates of the two MOS in the current mirror is to maintain the gain in the loading stages. If this resistor
+is too small it might cause a undesired swing loss through voltage division.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -80,7 +81,7 @@ And finally to drive the $8\Omega$ speaker we AC couple it so we dont drive it w
 
 \subsection{Loading Stage}
 The last stage of our amplifier is a Common Drain. We decided to use a common drain for multiple reasons. The first one and the main one
-is that its output resistance is very small, approximately $\frac{1}{g_m}$. As we mentioned earlier our current of 6mA gives us a $g_m\approx10^{-3}s$
+is that its output resistance is very small, approximately $\frac{1}{g_m}$. As we mentioned earlier our current of 6mA gives us a $g_m\approx0.03846$
 so the impedance looking into the source of the MOSFET is $\approx 1000\Omega$. Even though the gain of our source follower is approximately unity we
 still have some gain loss since the load we are trying to drive is $8\Omega$ the voltage division will attenuate the signal by approximately 100=40dB 
 however since the gain from our amplifier is high enough that our total circuit gain is just around 82dB which we will show later in the simulation 
