@@ -40,9 +40,14 @@ is in the order of $10^{-3}$ compared to the BJT's $0.038$), the large gate impe
 worry much about impedance loading between stages. As for the specific MOS, we used the BS170 N-channel MOSFETs because they had high saturation
 current capacity and, thus, a higher $g_m$ and gain.
 
-Going back to the biasing of the common sources. Our first decision was to choose a desired current depending on the gain and the $V_{outBIAS}$
-that we want. We will go through this calculations in a later section, but it is easy to see that both drain current and $V_{outBIAS}$ are easy
-to bias. Drain current is set by using a current mirror, as shown in Figure 3.
+Going back to the biasing of the common sources. Our first decision was to choose a desired drain current so that the gain and the $V_{outBIAS}$
+would depend on this current. We will go through this calculations in a later section, but it is easy to see that both drain current and 
+$V_{outBIAS}$ are straight forward to bias. Drain current is set by using a current mirror, as shown in Figure 3. Then we choose our drain 
+resistance such that we get a well centered $V_{outBIAS}$. In our case, we chose $R_D=1000k\Omega$, so the voltage drop on the resistor would be 
+6V and leave a $V_{outBIAS}\approx 4V$. The gain per common sourcce stage turned out to be low and inconsistent across different BS170, probably
+due to their mismatch in $\frac{W}{L}$, in fact, it was a gain ranging from 5 to 10. However, since we did not have inter-stage loading gain loss,
+cascading multiple of this common sources would increase our gain exponentially with a base in the range of 5 to 10. So five stages were enough
+to reach a gain of over 12500.
 
 \begin{figure}[htbp]
 \begin{center}
