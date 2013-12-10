@@ -237,6 +237,17 @@ Our Bode plot for the magnitude has some distortion since Excel doesn't display 
 \end{center}
 \end{figure}
 \FloatBarrier
+\newpage
+\subsection{SPICE Simulation}
+Our Bode plot for the magnitude has some distortion since Excel doesn't display dB scales very well when the range of values is very small.
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=5in]{MagPlot.png}
+\caption{Magnitude (Solid Line) and Phase (Dotted Line) Plot from SPICE}
+\end{center}
+\end{figure}
+\FloatBarrier
+
 
 
 \subsection{Output Impedance Hand Calculation}
@@ -255,7 +266,7 @@ Our $g_m$ and $r_o$ can be found with the following equations:
 and $I_D$ can be found using the following equation and given device parameters: 
 \begin{align*}
 	I_D &= \frac{1}{2} \mu_n C_{ox} \frac{W}{L}(V_{GS} -V_{TH})^2 (1+\lambda V_{DS}) \\
-	&= \frac{1}{2}K_p (V_G - R_s I_D - V_{TO})^2 (1+ \lambda (V_DD - R_s I_D)) \\
+	&= \frac{1}{2}K_p (V_G - R_s I_D - V_{TO})^2 (1+ \lambda (V_{DD} - R_s I_D)) \\
 	K_P &= 0.277 \\
 	R_s &= 100 \Omega \\
 	V_{TO} &= 1.8 V \\
