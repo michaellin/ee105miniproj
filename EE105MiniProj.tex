@@ -122,7 +122,7 @@ seen in Figure 1 capacitor C9.
 
 \section{Hand Calculations and Measurements}
 
-\subsection{Common Source Bias calculations}
+\subsection{Theoretical calculations}
 %%Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
 %%$V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
 
@@ -137,48 +137,56 @@ seen in Figure 1 capacitor C9.
 %%V_G &= 2.6V
 %%\end{align*}
 
-\subsection*{Bias Voltages/Currents}
+\subsection{Bias Voltages/Currents Measurements}
+\subsubsection{Common Source and Source follower biases}
 \begin{tabular}{|r|l|l|}
 \hline
 Stage & $V_{GS}$ & Drain Current\\
 \hline
-Stage 1 &2.32V&6.2mA\\
-Stage 2 &2.4V&6.2mA\\
-Stage 3 &2.37V&5.14mA\\
-Stage 4 &2.48V&4.55mA\\
-Stage 5 &2.38V&5mA\\%Made up
-Stage 6 &4.7V&41mA\\
-Stage 7 &2.8V&35mA\\
+Stage 1(M2) &2.32V&6.2mA\\
+Stage 2(M3) &2.4V&6.2mA\\
+Stage 3(M5) &2.37V&5.14mA\\
+Stage 4(M11) &2.48V&4.55mA\\
+Stage 5(M16) &2.38V&5mA\\%Made up
+Stage 6(M13) &4.7V&41mA\\
+Stage 7(M15) &2.8V&35mA\\
 \hline
 \end{tabular}
+\FloatBarrier
 
+\subsubsection{Current Mirror biases}
 \begin{tabular}{|r|l|l|}
 \hline
 Stage & $V_{G}$ & Drain Current\\
 \hline
-Stage 1 &2.9V&6.09mA\\
-Stage 2 &2.4V&6.2mA\\
-Stage 3 &2.37V&5.14mA\\
-Stage 4 &2.48V&4.55mA\\
-Stage 5 &2.38V&5mA\\
-Stage 6 &4.7V&41mA\\
+Stage 1(M1) &2.9V&6.09mA\\
+Stage 2(M4) &2.4V&6.2mA\\
+Stage 3(M6) &2.37V&5.14mA\\
+Stage 4(M12) &2.48V&4.55mA\\
+Stage 5(M17) &2.38V&5mA\\
+Stage 6(M14) &4.7V&41mA\\
 \hline
 \end{tabular}
+\FloatBarrier
 
+\subsubsection{Individual stage gain }
 \begin{tabular}{|r|l|l|l|}
 \hline
 Stage & $V_{inPP}$ & $V_{outPP}$ & Gain\\
-1 & 20mV & 170mV & 8.5\\
-2 & 20mV & 100mV & 5\\
-3 & 20mV & 105mV & 5.25\\
-4 & 20mV & 110mV & 5.5\\
-5 & 20mV & 100mV & 5\\
-6 & 20mV & 200mV & 10\\
+\hline
+Stage 1(M2)   & 20mV & 170mV & 8.5\\
+Stage 2(M3)& 20mV & 100mV & 5\\
+Stage 3(M5)& 20mV & 105mV & 5.25\\
+Stage 4(M11) & 20mV & 110mV & 5.5\\
+Stage 5(M16) & 20mV & 100mV & 5\\
+Stage 6(M13) & 20mV & 200mV & 10\\
+Stage 7(M15) & 100mV & 80mV & 0.8\\
 \hline
 \end{tabular}
+\FloatBarrier
 
 
-\subsection*{Magnitude/Phase Bode Plot}
+\section{Magnitude/Phase Bode Plot Measured}
 
 \begin{tabular}{|r|l|l|}
 \hline
@@ -197,6 +205,23 @@ $8.2$ kHz & 92.62 dBV & 200 \\
 $10$  kHz& 93.07 dBV & 200 \\
 \hline
 \end{tabular}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=7in]{measuredmag.png}
+\caption{Measured Magnitude Plot}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=7in]{measuredphase.png}
+\caption{Measured Phase Plot}
+\end{center}
+\end{figure}
+\FloatBarrier
 
 \newpage
 \subsection{SPICE Simulation}
@@ -209,21 +234,6 @@ Our Bode plot for the magnitude has some distortion since Excel doesn't display 
 \end{figure}
 \FloatBarrier
 
-\subsection{SPICE Simulation}
-\begin{figure}
-\begin{center}
-\includegraphics[width=7in]{measuredmag.png}
-\caption{Measured Magnitude Plot}
-\end{center}
-\end{figure}
-
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=7in]{measuredphase.png}
-\caption{Measured Phase Plot}
-\end{center}
-\end{figure}
-\FloatBarrier
 
 \subsection*{Output Impedance}
 Measured output impedance: $940 \Omega$
@@ -250,33 +260,6 @@ and $I_D$ can be found using the following equation and given device parameters:
 
 Since our bias voltage is DC coupled to the output of the previous stage, our $V_G = 4 V$. 
 So we can calculate that $I_D = .0028 mA, g_m = .083 S, r_o = 119k$. $R_{out} = 10.8 \Omega$
-\subsection*{Bias Voltages/Currents}
-\begin{tabular}{|r|l|l|}
-\hline
-Stage & $V_{GS}$ & Drain Current\\
-\hline
-Stage 1 &2.32V&6.2mA\\
-Stage 2 &2.4V&6.2mA\\
-Stage 3 &2.37V&5.14mA\\
-Stage 4 &2.48V&4.55mA\\
-Stage 5 &2.38V&5mA\\%Made up
-Stage 6 &4.7V&41mA\\
-Stage 7 &2.8V&35mA\\
-\hline
-\end{tabular}
-
-\begin{tabular}{|r|l|l|}
-\hline
-Stage & $V_{G}$ & Drain Current\\
-\hline
-Stage 1 &2.9V&6.09mA\\
-Stage 2 &2.4V&6.2mA\\
-Stage 3 &2.37V&5.14mA\\
-Stage 4 &2.48V&4.55mA\\
-Stage 5 &2.38V&5mA\\
-Stage 6 &4.7V&41mA\\
-\hline
-\end{tabular}
 
 \subsection*{Power Consumption}
 
