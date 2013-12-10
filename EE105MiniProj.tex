@@ -29,7 +29,7 @@ current capacity and, thus, a higher $g_m$ and gain.
 We used a total of 7 stages in our amplifier. Six common sources and one source follower.
 Our first decision was to choose topologies to use for amplification. We first considered using a cascode stage because of 
 its characteristically high gain and good frequency response (high bandwidth). However, due to the high gain of the cascode
-it was very difficult to bias it correctly such that it would not rail. The possible cascode configuration is shown in Figure 2,
+it was very difficult to bias it correctly such that it would not rail. The possible cascode configuration is shown in Figure 1,
 We need to choose R1 and R2 carefully such that the current being forced by both PMOS and NMOS current mirrors are the same.
 Otherwise, the small difference in current will reflect as a voltage drop in one of the $r_o$s and the high gain of the cascode
 will amplify and rail this difference.
@@ -43,10 +43,10 @@ will amplify and rail this difference.
 \FloatBarrier
 
 \subsubsection{Common Sources}
-After some more consideration, we decided to use multiple stages of common source topologies as the one shown in Figure 3 because they would 
+After some more consideration, we decided to use multiple stages of common source topologies as the one shown in Figure 2 because they would 
 be much easier to bias than cascode stage. Our first decision was to choose a desired drain current and the gain and $V_{outBIAS}$
 would depend on this current. We will go through this calculations in a later section, but through educated guess and some trial and errors we 
-chose a drain current of 6mA. Drain current is set by using a current mirror, as shown in Figure 3. Then we choose our drain 
+chose a drain current of 6mA. Drain current is set by using a current mirror, as shown in Figure 2. Then we choose our drain 
 resistance such that we get this 6mA and a well centered $V_{outBIAS}$(as we'll show later in the hand calculations). In our case, we chose 
 $R_D=1000k\Omega$, so the voltage drop on the resistor would be 6V and leave a $V_{outBIAS}\approx 4V$. The gain per common source stage turned 
 out to be low due to this small $R_D$ and inconsistent across different BS170, probably due to their mismatch in $\frac{W}{L}$, in fact, it 
@@ -67,7 +67,7 @@ is too small it might cause a undesired swing loss through voltage division.
 \subsection{Coupling between stages}
 
 Between each of the common source stages we AC couple with a 10uF capacitor and individually bias the gate voltage of each stage with its own current 
-mirror circuit as shown in Figure 1. Between the last common source M13 and the source follower M15 we use DC coupling as we will explain later on. 
+mirror circuit as shown in Figure 5. Between the last common source M13 and the source follower M15 we use DC coupling as we will explain later on. 
 And finally to drive the $8\Omega$ speaker we AC couple it so we dont drive it with a bias voltage otherwise it could sound distorted.
 
 \subsection{Loading Stage}
@@ -79,9 +79,9 @@ however since the gain from our amplifier is high enough that our total circuit 
 and calculations. To drive our $8\Omega$ speaker with $1V_{pp}$ we use a $100\Omega$ resistor in parallel to draw some of the current and not burn 
 the speaker with 1000/8=125mA. Another reason we use a source follower is that it has a good current gain, technically it has infinite current gain 
 since there is no current going into the gate but the current throughput is enough to get it up to around 40mA to drive the speaker. We can see the 
-implementation of the loading stage (source follower and speaker load) in Figure 4. To get a current as high as 40mA we had to bias the gate with a 
+implementation of the loading stage (source follower and speaker load) in Figure 3. To get a current as high as 40mA we had to bias the gate with a 
 high enough voltage, so since the $V_{outBIAS}$ of the previous common source stage was already biased to around 4V, we decided to DC couple this 
-last loading stage using the bias from the output of the last stage of common source as we can see in Figure 1.
+last loading stage using the bias from the output of the last stage of common source as we can see in Figure 5.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -92,7 +92,7 @@ last loading stage using the bias from the output of the last stage of common so
 \FloatBarrier
 
 \subsection{Volume Control}
-At last we implemented volume control using a potentiometer in the $R_D$ of the last common source stage as seen in Figure 5. We decided
+At last we implemented volume control using a potentiometer in the $R_D$ of the last common source stage as seen in Figure 4. We decided
 to place the potentionmeter in the last stage because this is where the largest voltage swing happens and its easier to fine tune the 
 voltage swing.
 
@@ -107,7 +107,7 @@ voltage swing.
 \subsection{Other small fixes to the amplifier}
 Another problem we saw was that the power supply started getting very noisy probably due to feedback in the circuit or inappropriate capacitor
 decoupling, this is an effect called "Squegging". Our solution to this was to add a 10uF capacitor in shunt with the power supply rails as 
-seen in Figure 1 capacitor C9.
+seen in Figure 5 capacitor C9.
 \newpage 
 
 \section{Circuit Diagram}
@@ -123,6 +123,8 @@ seen in Figure 1 capacitor C9.
 \section{Hand Calculations and Measurements}
 
 \subsection{Theoretical calculations}
+*See attached pages
+
 %%Through educated guesses and some trials and errors we chose 6mA to be our drain current. From this we can calculate our theoretical bias voltage
 %%$V_G$ for the current mirror shown in Figure 3. The current-voltage equation is given by
 
@@ -207,6 +209,7 @@ $10$  kHz& 93.07 dBV & 200 \\
 \end{tabular}
 \FloatBarrier
 
+Our Bode plot for the magnitude has some distortion since Excel doesn't display dB scales very well when the range of values is very small.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=7in]{measuredmag.png}
@@ -215,6 +218,7 @@ $10$  kHz& 93.07 dBV & 200 \\
 \end{figure}
 \FloatBarrier
 
+\newpage
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=7in]{measuredphase.png}
@@ -224,8 +228,8 @@ $10$  kHz& 93.07 dBV & 200 \\
 \FloatBarrier
 
 \newpage
+
 \subsection{SPICE Simulation}
-Our Bode plot for the magnitude has some distortion since Excel doesn't display dB scales very well when the range of values is very small.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=5in]{MagPlot.png}
@@ -235,7 +239,7 @@ Our Bode plot for the magnitude has some distortion since Excel doesn't display 
 \FloatBarrier
 
 
-\subsection*{Output Impedance}
+\subsection{Output Impedance Hand Calculation}
 Measured output impedance: $940 \Omega$
 Calculated output impedance:
 We know that the output impedance of the Source Follower stage is $R_S || r_o || \frac{1}{g_m}$.
@@ -259,8 +263,11 @@ and $I_D$ can be found using the following equation and given device parameters:
 \end{align*}
 
 Since our bias voltage is DC coupled to the output of the previous stage, our $V_G = 4 V$. 
-So we can calculate that $I_D = .0028 mA, g_m = .083 S, r_o = 119k$. $R_{out} = 10.8 \Omega$
+So we can calculate that $I_D = .028 mA, g_m = .083 S, r_o = 11.9k$. $R_{out} = 10.8 \Omega$.
+The discrepancies might be due to $K_p$ as explained in page 3 of the attached hand calculations.
 
-\subsection*{Power Consumption}
+\section{Power Consumption}
+The total power consumption varies with the current. But the power supply read an average of 100mA when using driving the speaker.
+So the total power consumption of our circuit is $P=9*0.1= 0.9W$.
 
 \end{document}
