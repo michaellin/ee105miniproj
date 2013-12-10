@@ -198,18 +198,6 @@ $10$  kHz& 93.07 dBV & 200 \\
 \hline
 \end{tabular}
 
-\newpage
-\subsection{SPICE Simulation}
-Our Bode plot for the magnitude has some distortion since Excel doesn't display dB scales very well when the range of values is very small.
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=5in]{MagPlot.png}
-\caption{Magnitude (Solid Line) and Phase (Dotted Line) Plot from SPICE}
-\end{center}
-\end{figure}
-\FloatBarrier
-
-\subsection{SPICE Simulation}
 \begin{figure}
 \begin{center}
 \includegraphics[width=7in]{measuredmag.png}
@@ -224,6 +212,17 @@ Our Bode plot for the magnitude has some distortion since Excel doesn't display 
 \end{center}
 \end{figure}
 \FloatBarrier
+\newpage
+\subsection{SPICE Simulation}
+Our Bode plot for the magnitude has some distortion since Excel doesn't display dB scales very well when the range of values is very small.
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=5in]{MagPlot.png}
+\caption{Magnitude (Solid Line) and Phase (Dotted Line) Plot from SPICE}
+\end{center}
+\end{figure}
+\FloatBarrier
+
 
 \subsection*{Output Impedance}
 Measured output impedance: $940 \Omega$
@@ -241,7 +240,7 @@ Our $g_m$ and $r_o$ can be found with the following equations:
 and $I_D$ can be found using the following equation and given device parameters: 
 \begin{align*}
 	I_D &= \frac{1}{2} \mu_n C_{ox} \frac{W}{L}(V_{GS} -V_{TH})^2 (1+\lambda V_{DS}) \\
-	&= \frac{1}{2}K_p (V_G - R_s I_D - V_{TO})^2 (1+ \lambda (V_DD - R_s I_D)) \\
+	&= \frac{1}{2}K_p (V_G - R_s I_D - V_{TO})^2 (1+ \lambda (V_{DD} - R_s I_D)) \\
 	K_P &= 0.277 \\
 	R_s &= 100 \Omega \\
 	V_{TO} &= 1.8 V \\
@@ -249,7 +248,7 @@ and $I_D$ can be found using the following equation and given device parameters:
 \end{align*}
 
 Since our bias voltage is DC coupled to the output of the previous stage, our $V_G = 4 V$. 
-So we can calculate that $I_D = .028 mA, g_m = .083 S, r_o = 119k$. $R_{out} = 10.8 \Omega$
+So we can calculate that $I_D = .028 A, g_m = .083 S, r_o = 119k$. $R_{out} = 10.8 \Omega$
 \subsection*{Bias Voltages/Currents}
 \begin{tabular}{|r|l|l|}
 \hline
